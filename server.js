@@ -4,8 +4,9 @@ const path = require("path")
 const expressSession = require("express-session")
 const nodemailer = require("nodemailer")
 const app = express()
-const http = require("http").createServer(app)
+// const http = require("http").createServer(app)
 require("dotenv").config()
+
 
 const wineService = require("./services/wineries-service.js")
 const ingsService = require("./services/ings-service.js")
@@ -30,15 +31,16 @@ if (process.env.NODE_ENV === "production") {
     origin: [
       "http://127.0.0.1:5173",
       "http://localhost:3030",
-      "http://localhost:3000",
-      "http://127.0.0.1:5174/",
+      "http://127.0.0.1:5174",
+      "https://veganizeit.onrender.com",
+      "http://127.0.0.1:4173",
     ],
     credentials: true,
   }
   app.use(cors(corsOptions))
 }
 
-app.get("/api/", (req, res) => {
+app.get("/", (req, res) => {
   res.send("Welcome")
 })
 
@@ -61,9 +63,9 @@ app.get("/api/ing", async (req, res) => {
 
 app.get("/api/ing/:name", async (req, res) => {
   const {name} = req.params
-  const wine = await ingsService.checkIng(name)
-  console.log(wine)
-  res.send(wine)
+  const ing = await ingsService.checkIng(name)
+  console.log(ing)
+  res.send(ing)
 })
 
 let transporter = nodemailer.createTransport({
@@ -95,7 +97,7 @@ app.post("/api/send", (req, res) => {
     text: `${req.body.message}`,
   }
 
-  transporter.sendMail(mailOptions, function (err, data) {
+  transporter.sendMail(mailOptions, (err, data) => {
     if (err) {
       res.json({
         status: "fail",
@@ -109,14 +111,12 @@ app.post("/api/send", (req, res) => {
   })
 })
 
-
-
-app.get("/**", (req, res) => {
+app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"))
 })
 
-const port = process.env.PORT || 3030
-http.listen(port, () => {
+const port = process.env.PORT || 3000
+app.listen(port, () => {
   console.log("Server is running on port: " + port)
 })
 

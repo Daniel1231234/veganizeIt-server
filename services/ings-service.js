@@ -29,11 +29,11 @@ async function checkIng(name) {
 async function remove(ingId) {
   try {
     const collection = await dbService.getCollection("ings")
-    await collection.deleteOne({_id: ObjectId(ingsId)})
+    await collection.deleteOne({_id: ObjectId(ingId)})
 
-    return ingsId
+    return ingId
   } catch (err) {
-    logger.error(`cannot remove ings ${ingsId}`, err)
+    logger.error(`cannot remove ings ${ingId}`, err)
     throw err
   }
 }
