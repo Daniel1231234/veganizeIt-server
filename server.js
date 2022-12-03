@@ -94,7 +94,7 @@ app.post("/api/send", (req, res) => {
     subject: `Message from: ${req.body.name}`,
     text: `${req.body.message}`,
   }
-  console.log(mailOptions)
+
   transporter.sendMail(mailOptions, (err, data) => {
     if (err) {
       res.json({
