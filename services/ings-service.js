@@ -6,6 +6,8 @@ module.exports = {
   checkIng,
 }
 
+
+
 async function query() {
   const collection = await dbService.getCollection("ings")
   var ings = await collection.find().toArray()
@@ -25,6 +27,8 @@ async function checkIng(name) {
   const res = ings.filter((ing) => ing.name === ingToCheck)
   return res
 }
+
+
 
 async function remove(ingId) {
   try {
@@ -64,53 +68,3 @@ async function update(ings) {
   }
 }
 
-// function _setInitialDataNonVegan() {
-//   let nonVeganIngrs = []
-//   for (let key in nonVegan) {
-//     let item = {
-//       name: nonVegan[key],
-//       isVegan: false,
-//       id: _makeId(),
-//     }
-//     nonVeganIngrs.push(item)
-//   }
-//   return nonVeganIngrs
-// }
-
-// function _setInitialDataVegan() {
-//   let veganIngrs = []
-//   for (let key in vegan) {
-//     let item = {
-//       name: vegan[key],
-//       isVegan: true,
-//       id: _makeId(),
-//     }
-//     veganIngrs.push(item)
-//   }
-//   return veganIngrs
-// }
-
-// function _makeId(length = 5) {
-//   var text = ""
-//   var possible =
-//     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-
-//   for (var i = 0; i < length; i++) {
-//     text += possible.charAt(Math.floor(Math.random() * possible.length))
-//   }
-
-//   return text
-// }
-
-// function _saveIngsToFile(ings) {
-//   return new Promise((resolve, reject) => {
-//     const content = JSON.stringify(ings, null, 2)
-//     fs.writeFile("./data/ings.json", content, (err) => {
-//       if (err) {
-//         console.error(err)
-//         return reject(err)
-//       }
-//       resolve()
-//     })
-//   })
-// }

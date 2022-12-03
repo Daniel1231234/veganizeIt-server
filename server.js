@@ -4,13 +4,11 @@ const path = require("path")
 const expressSession = require("express-session")
 const nodemailer = require("nodemailer")
 const app = express()
-// const http = require("http").createServer(app)
 require("dotenv").config()
-
 
 const wineService = require("./services/wineries-service.js")
 const ingsService = require("./services/ings-service.js")
-// const emailService = require("./services/send-email-service.js")
+// const emailService = require("./services/barcode-service.js")
 
 app.use(express.static("public"))
 
@@ -85,7 +83,7 @@ let transporter = nodemailer.createTransport({
 
 transporter.verify((err, success) => {
   err
-    ? console.log(err)
+    ? console.log("err => ", err)
     : console.log(`=== Server is ready to take messages: ${success} ===`)
 })
 
@@ -96,7 +94,7 @@ app.post("/api/send", (req, res) => {
     subject: `Message from: ${req.body.name}`,
     text: `${req.body.message}`,
   }
-
+  console.log(mailOptions)
   transporter.sendMail(mailOptions, (err, data) => {
     if (err) {
       res.json({
