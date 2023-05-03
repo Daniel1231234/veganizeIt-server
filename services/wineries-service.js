@@ -1,35 +1,26 @@
-const dbService = require("./db-service")
+const dbService = require("./db-service");
+const { scrape } = require("./puppeteer.js");
 
-async function query() {
-  const collection = await dbService.getCollection("wine")
-  var wines = await collection.find().toArray()
-  const winesToReturn = wines.map((wine) => {
-    return {
-      id: wine._id,
-      name: wine.name,
-      country: wine.country,
-      isVegan: wine.isVegan,
-    }
-  })
-  return winesToReturn
+async function query(data) {
+  const { value, filterBy } = data;
+  const collection = await dbService.getCollection("wine");
+
+  const wines = await collection.find().toArray();
+
+  const wineToReturn = wines.filter((wine) => {
+    if (filterBy === "country") return wine.country === value;
+    if (filterBy === "name") return wine.name === value.toLowerCase().trim();
+  });
+  console.log(wineToReturn);
+  return wineToReturn;
 }
 
-async function checkWine(val) {
-  try {
-    if (!val || val.length === 0) return null
-    const allWines = await query()
-    const wineName = val.trim().toLowerCase()
-    const wineToCheck = allWines.find((wine) => wine.name === wineName)
-
-    return wineToCheck
-  } catch (err) {
-    console.log(err)
-  }
+async function scrapeFrom(val) {
+  const winesFromSearch = await scrape(val);
+  return winesFromSearch;
 }
+
 
 module.exports = {
   query,
-  checkWine,
-}
-
-
+};

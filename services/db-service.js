@@ -1,12 +1,9 @@
 const MongoClient = require("mongodb").MongoClient
 
-const config = require("../config")
-
 module.exports = {
   getCollection,
 }
 
-// Database Name
 const dbName = "vegan_db"
 
 var dbConn = null
@@ -17,7 +14,7 @@ async function getCollection(collectionName) {
     const collection = await db.collection(collectionName)
     return collection
   } catch (err) {
-    logger.error("Failed to get Mongo collection", err)
+    console.log("Failed to get Mongo collection", err)
     throw err
   }
 }
@@ -25,16 +22,15 @@ async function getCollection(collectionName) {
 async function connect() {
   if (dbConn) return dbConn
   try {
-    const client = await MongoClient.connect(config.dbURL, {
+    const client = await MongoClient.connect(process.env.DB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })
     const db = client.db(dbName)
     dbConn = db
-    // console.log(db)
     return db
   } catch (err) {
-    logger.error("Cannot Connect to DB", err)
+    console.log("Cannot Connect to DB", err)
     throw err
   }
 }
